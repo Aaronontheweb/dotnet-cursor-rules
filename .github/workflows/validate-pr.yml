@@ -1,4 +1,4 @@
-name: Validate Documentation Links
+name: PR Validation
 on:
   pull_request:
     branches: [ master ]
@@ -10,8 +10,8 @@ on:
       - '**.md'
 
 jobs:
-  validate-docs:
-    name: Check for Broken Links
+  pr-validation:
+    name: PR Validation
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,6 +24,6 @@ jobs:
       - name: Install markdown-link-check
         run: npm install -g markdown-link-check
       
-      - name: Check for broken links
+      - name: Validate Documentation Links
         run: |
           find . -name "*.md" -exec markdown-link-check {} \; 
