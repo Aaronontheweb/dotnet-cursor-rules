@@ -1,0 +1,84 @@
+name: C# Style Rule Suggestion
+description: Suggest a new C# coding style rule
+title: "[C# Style]: "
+labels: ["enhancement", "c#", "style-rule"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to suggest a new C# style rule! Please fill out this form as completely as possible.
+        
+  - type: input
+    id: rule-name
+    attributes:
+      label: Rule Name
+      description: A short, descriptive name for the rule
+      placeholder: "e.g., UseExplicitTypeDeclarations"
+    validations:
+      required: true
+      
+  - type: textarea
+    id: rule-description
+    attributes:
+      label: Rule Description
+      description: Describe what the rule enforces or recommends
+      placeholder: "e.g., Use explicit type declarations instead of var for improved code readability"
+    validations:
+      required: true
+      
+  - type: textarea
+    id: good-example
+    attributes:
+      label: Good Example
+      description: Provide an example of code that follows this rule
+      render: csharp
+      placeholder: |
+        // Good:
+        string message = "Hello";
+        List<int> numbers = new List<int>();
+    validations:
+      required: true
+      
+  - type: textarea
+    id: bad-example
+    attributes:
+      label: Bad Example
+      description: Provide an example of code that violates this rule
+      render: csharp
+      placeholder: |
+        // Bad:
+        var message = "Hello";
+        var numbers = new List<int>();
+    validations:
+      required: true
+      
+  - type: textarea
+    id: rationale
+    attributes:
+      label: Rationale
+      description: Explain why this rule would be beneficial
+      placeholder: "This rule improves code readability by making types explicit, which helps developers understand the code without having to infer types."
+    validations:
+      required: true
+      
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Suggested Severity
+      description: How important is it to follow this rule?
+      options:
+        - Error (must be followed)
+        - Warning (should be followed)
+        - Information (nice to follow)
+        - None (optional)
+    validations:
+      required: true
+      
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other context or considerations about the rule
+      placeholder: "e.g., Special cases where the rule might not apply, or specific scenarios it's designed for"
+    validations:
+      required: false 
