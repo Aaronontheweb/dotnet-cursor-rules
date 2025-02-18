@@ -271,6 +271,107 @@ Immutable Collections:
           metadata.ToImmutableDictionary());
       ```
 
+// ... existing code ...
+
+Error Handling:
+  - Use Result types for expected failures:
+      ```csharp
+      // Good: Explicit error handling
+      public sealed record Result<T>
+      {
+          public T? Value { get; }
+          public Error? Error { get; }
+          
+          private Result(T value) => Value = value;
+          private Result(Error error) => Error = error;
+          
+          public static Result<T> Success(T value) => new(value);
+          public static Result<T> Failure(Error error) => new(error);
+      }
+      ```
+  - Prefer exceptions for exceptional cases:
+      ```csharp
+      // Good: Exception for truly exceptional case
+      public static OrderId From(string value)
+      {
+          if (!Guid.TryParse(value, out var guid))
+              throw new ArgumentException("Invalid OrderId format", nameof(value));
+          
+          return new OrderId(guid);
+      }
+      ```
+
+Safe Operations:
+  - Use Try methods for safer operations:
+      ```csharp
+      // Good: Using TryGetValue for dictionary access
+      if (dictionary.TryGetValue(key, out var value))
+      {
+          // Use value safely here
+      }
+      else
+      {
+          // Handle missing key case
+      }
+
+      // Avoid: Direct indexing which can throw
+      var value = dictionary[key];  // Throws if key doesn't exist
+
+      // Good: Using Uri.TryCreate for URL parsing
+      if (Uri.TryCreate(urlString, UriKind.Absolute, out var uri))
+      {
+          // Use uri safely here
+      }
+      else
+      {
+          // Handle invalid URL case
+      }
+
+      // Avoid: Direct Uri creation which can throw
+      var uri = new Uri(urlString);  // Throws on invalid URL
+
+      // Good: Using int.TryParse for number parsing
+      if (int.TryParse(input, out var number))
+      {
+          // Use number safely here
+      }
+      else
+      {
+          // Handle invalid number case
+      }
+
+      // Good: Combining Try methods with null coalescing
+      var value = dictionary.TryGetValue(key, out var result)
+          ? result
+          : defaultValue;
+
+      // Good: Using Try methods in LINQ with pattern matching
+      var validNumbers = strings
+          .Select(s => (Success: int.TryParse(s, out var num), Value: num))
+          .Where(x => x.Success)
+          .Select(x => x.Value);
+      ```
+      
+  - Prefer Try methods over exception handling:
+      ```csharp
+      // Good: Using Try method
+      if (decimal.TryParse(priceString, out var price))
+      {
+          // Process price
+      }
+
+      // Avoid: Exception handling for expected cases
+      try
+      {
+          var price = decimal.Parse(priceString);
+          // Process price
+      }
+      catch (FormatException)
+      {
+          // Handle invalid format
+      }
+      ```
+
 Asynchronous Programming:
   - Avoid async void:
       ```csharp
