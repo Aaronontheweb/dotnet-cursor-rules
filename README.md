@@ -2,6 +2,10 @@
 
 A collection of [Cursor AI rules](https://docs.cursor.com/context/rules-for-ai) for .NET development best practices.
 
+## How to Use This Repository
+
+Copy the relevant rules you want to use into your project's `.cursor/rules` directory OR add them as global rules in the Cursor ide.
+
 ## 📚 Available Rule Sets
 
 ### 🛠️ [.NET Tool Management](dotnet-tools/)
