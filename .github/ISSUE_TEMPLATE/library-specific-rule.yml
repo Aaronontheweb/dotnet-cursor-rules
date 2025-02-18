@@ -1,0 +1,113 @@
+name: Library-Specific Rule Suggestion
+description: Suggest rules for a specific library or dependency
+title: "[Library Rule]: "
+labels: ["enhancement", "library-specific"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to suggest rules for a specific library or dependency! Please fill out this form as completely as possible.
+        
+  - type: input
+    id: library-name
+    attributes:
+      label: Library Name
+      description: The name of the library or dependency these rules apply to
+      placeholder: "e.g., Entity Framework Core, Newtonsoft.Json"
+    validations:
+      required: true
+      
+  - type: dropdown
+    id: language
+    attributes:
+      label: Programming Language
+      description: Which programming language are these rules for?
+      options:
+        - C#
+        - F#
+    validations:
+      required: true
+      
+  - type: input
+    id: library-version
+    attributes:
+      label: Library Version
+      description: The version or version range these rules apply to
+      placeholder: "e.g., 6.0.x, >= 5.0"
+    validations:
+      required: true
+      
+  - type: textarea
+    id: rules-description
+    attributes:
+      label: Rules Description
+      description: Describe the rules you're suggesting for this library
+      placeholder: |
+        Example rules:
+        1. Always use Include() for related entities in EF Core queries
+        2. Prefer async methods when available
+    validations:
+      required: true
+      
+  - type: textarea
+    id: good-example
+    attributes:
+      label: Good Examples
+      description: Provide examples of code that follow these rules
+      render: csharp
+      placeholder: |
+        // Good:
+        var orders = await context.Orders
+            .Include(o => o.Customer)
+            .Include(o => o.OrderItems)
+            .ToListAsync();
+    validations:
+      required: true
+      
+  - type: textarea
+    id: bad-example
+    attributes:
+      label: Bad Examples
+      description: Provide examples of code that violate these rules
+      render: csharp
+      placeholder: |
+        // Bad:
+        var orders = context.Orders.ToList(); // N+1 query problem
+        foreach (var order in orders)
+        {
+            // Separate queries for each order
+            var customer = context.Customers.Find(order.CustomerId);
+        }
+    validations:
+      required: true
+      
+  - type: textarea
+    id: rationale
+    attributes:
+      label: Rationale
+      description: Explain why these rules would be beneficial
+      placeholder: "These rules help prevent common performance issues and follow best practices recommended by the library authors."
+    validations:
+      required: true
+      
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Suggested Severity
+      description: How important is it to follow these rules?
+      options:
+        - Error (must be followed)
+        - Warning (should be followed)
+        - Information (nice to follow)
+        - None (optional)
+    validations:
+      required: true
+      
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other context about these rules
+      placeholder: "e.g., Links to official documentation, blog posts, or other resources that support these rules"
+    validations:
+      required: false 
