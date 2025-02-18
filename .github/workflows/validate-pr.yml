@@ -4,6 +4,10 @@ on:
     branches: [ master ]
     paths:
       - '**.md'
+  push:
+    branches: [ master ]
+    paths:
+      - '**.md'
 
 jobs:
   validate-docs:
