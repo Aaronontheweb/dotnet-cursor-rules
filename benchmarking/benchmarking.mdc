@@ -1,0 +1,235 @@
+# Cursor Rules File: .NET Benchmarking Best Practices
+# This file provides guidelines for writing effective benchmarks using BenchmarkDotNet
+# and other performance testing tools.
+
+Role Definition:
+ - Performance Engineer
+ - .NET Runtime Specialist
+ - Optimization Expert
+
+General:
+  Description: >
+    Performance testing and benchmarking should be systematic, reproducible,
+    and provide meaningful insights. Use BenchmarkDotNet as the primary tool
+    for micro-benchmarking and performance regression testing.
+  Requirements:
+    - Use BenchmarkDotNet for micro-benchmarks
+    - Ensure consistent test environments
+    - Follow scientific method
+    - Track performance metrics over time
+    - Consider memory and allocation patterns
+
+Project Setup:
+  - Configure benchmark projects:
+      ```xml
+      <Project Sdk="Microsoft.NET.Sdk">
+        <PropertyGroup>
+          <OutputType>Exe</OutputType>
+          <TargetFramework>net8.0</TargetFramework>
+          <Configuration>Release</Configuration>
+          <Optimize>true</Optimize>
+          <DebugSymbols>false</DebugSymbols>
+        </PropertyGroup>
+        
+        <ItemGroup>
+          <PackageReference Include="BenchmarkDotNet" Version="0.13.10" />
+          <PackageReference Include="BenchmarkDotNet.Diagnostics.Windows" Version="0.13.10" 
+              Condition="'$(OS)' == 'Windows_NT'" />
+        </ItemGroup>
+      </Project>
+      ```
+
+Benchmark Structure:
+  - Basic benchmark setup:
+      ```csharp
+      [MemoryDiagnoser]
+      [RankColumn, MinColumn, MaxColumn, MeanColumn, MedianColumn]
+      public class StringOperationsBenchmarks
+      {
+          private const string TestString = "Hello, World!";
+          private readonly StringBuilder _builder = new();
+          
+          [Params(10, 100, 1000)]
+          public int Iterations { get; set; }
+          
+          [GlobalSetup]
+          public void Setup()
+          {
+              // Setup code that runs once before all benchmarks
+          }
+          
+          [Benchmark(Baseline = true)]
+          public string StringConcat()
+          {
+              var result = string.Empty;
+              for (int i = 0; i < Iterations; i++)
+                  result += TestString;
+              return result;
+          }
+          
+          [Benchmark]
+          public string StringBuilder()
+          {
+              _builder.Clear();
+              for (int i = 0; i < Iterations; i++)
+                  _builder.Append(TestString);
+              return _builder.ToString();
+          }
+      }
+      ```
+
+Memory Analysis:
+  - Track allocations and GC:
+      ```csharp
+      [MemoryDiagnoser]
+      [GcServer(true)]
+      public class MemoryBenchmarks
+      {
+          [Benchmark]
+          public IEnumerable<string> AllocatingMethod()
+          {
+              return Enumerable.Range(0, 1000)
+                  .Select(i => i.ToString());
+          }
+          
+          [Benchmark]
+          public IEnumerable<string> NonAllocatingMethod()
+          {
+              return Enumerable.Range(0, 1000)
+                  .Select(i => i.ToString())
+                  .ToArray();
+          }
+      }
+      ```
+
+Hardware Intrinsics:
+  - Measure SIMD performance:
+      ```csharp
+      [SimpleJob(RuntimeMoniker.Net80)]
+      [RyuJitX64Job]
+      public class VectorBenchmarks
+      {
+          private float[] _data;
+          
+          [GlobalSetup]
+          public void Setup()
+          {
+              _data = new float[1024];
+              // Initialize data
+          }
+          
+          [Benchmark(Baseline = true)]
+          public float ScalarSum()
+          {
+              float sum = 0;
+              for (int i = 0; i < _data.Length; i++)
+                  sum += _data[i];
+              return sum;
+          }
+          
+          [Benchmark]
+          public float VectorSum()
+          {
+              return Vector.Sum(_data);
+          }
+      }
+      ```
+
+Async Performance:
+  - Benchmark async operations:
+      ```csharp
+      public class AsyncBenchmarks
+      {
+          private HttpClient _client;
+          
+          [GlobalSetup]
+          public void Setup()
+          {
+              _client = new HttpClient();
+          }
+          
+          [Benchmark]
+          public async Task<string> SingleRequest()
+          {
+              return await _client.GetStringAsync("http://example.com");
+          }
+          
+          [Benchmark]
+          public async Task<string[]> ParallelRequests()
+          {
+              var tasks = Enumerable.Range(0, 10)
+                  .Select(_ => _client.GetStringAsync("http://example.com"))
+                  .ToArray();
+              
+              return await Task.WhenAll(tasks);
+          }
+      }
+      ```
+
+CI/CD Integration:
+  - Configure benchmark runs:
+      ```yaml
+      - name: Run Benchmarks
+        run: |
+          dotnet run -c Release --filter '*'
+      
+      - name: Store Results
+        uses: actions/upload-artifact@v3
+        with:
+          name: benchmark-results
+          path: BenchmarkDotNet.Artifacts/**
+      ```
+  - Track performance over time:
+      ```csharp
+      [Config(typeof(RegressionConfig))]
+      public class RegressionBenchmarks
+      {
+          private class RegressionConfig : ManualConfig
+          {
+              public RegressionConfig()
+              {
+                  AddExporter(MarkdownExporter.GitHub);
+                  AddDiagnoser(MemoryDiagnoser.Default);
+                  AddColumn(StatisticColumn.Median);
+                  AddColumn(RankColumn.Arabic);
+              }
+          }
+      }
+      ```
+
+Best Practices:
+  - Avoid common pitfalls:
+      ```csharp
+      // Good: Proper benchmark isolation
+      [IterationSetup]
+      public void IterationSetup()
+      {
+          _data = new byte[1024];  // Fresh data for each iteration
+      }
+      
+      // Avoid: Shared state between iterations
+      private byte[] _sharedData = new byte[1024];  // Can lead to false results
+      ```
+  - Use appropriate job configurations:
+      ```csharp
+      [SimpleJob(RuntimeMoniker.Net80, baseline: true)]
+      [SimpleJob(RuntimeMoniker.Net70)]
+      [SimpleJob(RuntimeMoniker.Net60)]
+      public class CrossVersionBenchmarks
+      {
+          [Benchmark]
+          public void BenchmarkMethod() { }
+      }
+      ```
+  - Document environment requirements:
+      ```csharp
+      /*
+      ## Required Environment
+      - Windows 10+ or Linux with perf_event_paranoid <= 2
+      - CPU: Modern x64 processor with AVX2 support
+      - RAM: 16GB minimum
+      - Minimal background processes
+      */
+      ```
+
+# End of Cursor Rules File 

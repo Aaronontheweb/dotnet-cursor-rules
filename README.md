@@ -19,6 +19,22 @@ Rules for managing .NET solutions and dependencies:
 - Security and license compliance
 - Build and dependency automation
 
+### [C# Development](csharp/)
+Rules for writing clean, maintainable C# code:
+- Modern C# coding patterns
+- Testing best practices
+- Code organization
+- Error handling
+- Dependency management
+
+### [Benchmarking](benchmarking/)
+Rules for performance testing and benchmarking:
+- BenchmarkDotNet usage
+- Memory and allocation analysis
+- Performance regression testing
+- Hardware optimizations
+- CI/CD integration
+
 ## Usage
 
 These rules are designed to be used with [Cursor](https://cursor.sh), providing AI-powered guidance for .NET development. Each rule set contains:
