@@ -1,3 +1,7 @@
+---
+description: 
+globs: 
+---
 # Cursor Rules File: C# Coding Style Best Practices
 # This file provides guidelines for writing clean, maintainable, and idiomatic C# code
 # with a focus on functional patterns and proper abstraction.
@@ -166,15 +170,17 @@ Dependency Management:
       ```
 
 Code Clarity:
-  - Avoid complex indexers:
+    - Prefer range indexers over LINQ:
       ```csharp
-      // Good: Clear method names
+      // Good: Using range indexers with clear comments
+      var lastItem = items[^1];  // ^1 means "1 from the end"
+      var firstThree = items[..3];  // ..3 means "take first 3 items"
+      var slice = items[2..5];  // take items from index 2 to 4 (5 exclusive)
+      
+      // Avoid: Using LINQ when range indexers are clearer
       var lastItem = items.LastOrDefault();
       var firstThree = items.Take(3).ToList();
-      
-      // Avoid: Cryptic range operations
-      var lastItem = items[^1];
-      var firstThree = items[..3];
+      var slice = items.Skip(2).Take(3).ToList();
       ```
   - Use meaningful names:
       ```csharp
