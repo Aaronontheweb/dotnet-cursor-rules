@@ -23,7 +23,17 @@ This document outlines the meta-rules for cursor operations in this repository.
    - Always commit changes to `*.mdc` files directly
    - Ensure changes to `*.mdc` files are synchronized with their implementation
    - Maintain consistent formatting within MDC files
+   - Prefer modifying existing files over creating new ones unless explicitly requested
+   - When adding new content, first check if it fits within an existing rule file
 
+
+2. **File Creation**
+
+   - Only create new rule files when:
+     - Explicitly requested by the user
+     - The content doesn't logically fit in any existing rule file
+     - Creating a new file would significantly improve organization and clarity
+   - Document the rationale for creating new files in their README.md
 
 ## Code Style & Structure
 
