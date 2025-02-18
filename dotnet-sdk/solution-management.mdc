@@ -106,4 +106,65 @@ Maintenance:
       - Document changes in commit messages
       - Consider using git hooks for validation
 
+Compilation:
+  - Use dotnet CLI for builds:
+      - Prefer `dotnet build` over IDE builds for consistency
+      - Use `dotnet build -c Release` for release builds
+      - Enable deterministic builds with `/p:ContinuousIntegrationBuild=true`
+  - Enforce code quality:
+      - Enable `TreatWarningsAsErrors` in Directory.Build.props:
+        ```xml
+        <PropertyGroup>
+          <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+          <!-- Optionally allow specific warnings -->
+          <WarningsNotAsErrors>CS1591</WarningsNotAsErrors>
+        </PropertyGroup>
+        ```
+      - Address warnings properly:
+          - Fix the underlying issue rather than suppressing
+          - Document any necessary warning suppressions
+          - Use `#pragma warning disable` sparingly and only with comments
+  - Build configuration:
+      - Use conditional compilation symbols purposefully
+      - Define debug/release-specific behavior clearly
+      - Example:
+        ```xml
+        <PropertyGroup>
+          <DefineConstants>TRACE</DefineConstants>
+          <DefineConstants Condition="'$(Configuration)'=='Debug'">$(DefineConstants);DEBUG</DefineConstants>
+        </PropertyGroup>
+        ```
+  - Performance:
+      - Enable incremental builds by default
+      - Use `dotnet build --no-incremental` only when needed
+      - Consider using Fast Up-to-Date Check:
+        ```xml
+        <PropertyGroup>
+          <DisableFastUpToDateCheck>false</DisableFastUpToDateCheck>
+        </PropertyGroup>
+        ```
+  - Build output:
+      - Set consistent output paths
+      - Configure deterministic output:
+        ```xml
+        <PropertyGroup>
+          <Deterministic>true</Deterministic>
+          <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+        </PropertyGroup>
+        ```
+  - Error handling:
+      - Log build errors comprehensively
+      - Use MSBuild binary log for detailed diagnostics:
+        ```bash
+        dotnet build -bl:build.binlog
+        ```
+      - Configure error reporting in CI/CD:
+        ```yaml
+        - name: Build
+          run: dotnet build --configuration Release /p:ContinuousIntegrationBuild=true
+          env:
+            DOTNET_CLI_TELEMETRY_OPTOUT: 1
+            DOTNET_NOLOGO: 1
+        ```
+
 # End of Cursor Rules File 
