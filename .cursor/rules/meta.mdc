@@ -37,8 +37,13 @@ This document outlines the meta-rules for cursor operations in this repository.
    - Don't move files without updating all references
    - Maintain existing import/include order
 
-## Documentation
+## Rule Content
 
 1. **Examples**
     - Always include "do" and "don't" examples when showing specific changes to files or syntax
     - Include helpful comments that explain why an example is a "do" or a "don't"
+
+## Documentation
+
+1. **README.md**
+    - Each `*.mdc` file is lumped into a folder with a `README.md` file explaining what the rule does and when it's used. 
