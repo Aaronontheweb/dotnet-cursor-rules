@@ -53,5 +53,5 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 📄 License
 
-Copyright 2010-2025 Aaron Stannard
+Copyright 2010-2025 [Aaron Stannard](https://aaronstannard.com/)
 Licensed under the Apache 2.0 license.
