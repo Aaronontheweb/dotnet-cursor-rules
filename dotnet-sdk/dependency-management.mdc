@@ -40,16 +40,51 @@ Package Installation:
       - Verify package authenticity (signed packages)
       - Consider package maintenance status
 
-Package Updates:
-  - Use CLI for updates:
-      - List outdated packages: `dotnet list package --outdated`
-      - Update specific package: `dotnet add package <PackageId>`
-      - Update all packages: Consider using `dotnet outdated -u`
-  - Update strategy:
-      - Test updates in development/CI before production
-      - Update one package at a time when possible
-      - Document breaking changes
-      - Maintain changelog entries
+Check and Upgrade NuGet Packages:
+
+  To check for outdated packages and upgrade them in your .NET solution:
+
+  1. **Check for outdated packages**
+     ```bash
+     dotnet list package --outdated
+     ```
+     This command will show:
+     - Currently used version ("Resolved")
+     - Latest available version ("Latest")
+     - The version you're requesting ("Requested")
+
+  2. **Update package versions**
+     - If using central package management (Directory.Packages.props):
+       - Update the versions in `Directory.Packages.props`:
+       ```xml
+       <PackageVersion Include="PackageName" Version="NewVersion" />
+       ```
+
+     - If using traditional package references:
+       ```bash
+       dotnet add package PackageName --version NewVersion
+       ```
+
+  3. **Restore and verify**
+     ```bash
+     dotnet restore
+     dotnet build
+     dotnet test
+     ```
+
+  Example output of `dotnet list package --outdated`:
+  ```
+  Project `MyProject` has the following updates to its packages
+     [netstandard2.1]:
+     Top-level Package      Requested   Resolved   Latest
+     > Akka.Streams         1.5.13      1.4.45     1.5.38
+  ```
+
+  Note: After updating packages, always:
+  1. Check for breaking changes in the package's release notes
+  2. Build the solution to catch any compatibility issues
+  3. Run tests to ensure everything still works
+  4. Review and update any code that needs to be modified for the new versions
 
 Security Considerations:
   - Enable security scanning:
