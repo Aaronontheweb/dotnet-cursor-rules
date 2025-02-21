@@ -15,6 +15,14 @@ Rules for working with .NET CLI tools:
 - 🔄 Managing tool versions and updates
 - ✨ Best practices for tool development
 
+### 🔄 [CI/CD](ci-cd/)
+Rules for build and deployment processes:
+- 🏗️ Build system configuration and best practices
+- 📝 Release management and versioning
+- 🔐 Code signing and security
+- 🚀 Pipeline configuration (GitHub Actions & Azure DevOps)
+- 📦 Package publishing
+
 ### 🎛️ [.NET SDK Management](dotnet-sdk/)
 Rules for managing .NET solutions and dependencies:
 - 🎯 SDK version control and configuration
