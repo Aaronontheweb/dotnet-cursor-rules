@@ -8,6 +8,16 @@ Copy the relevant rules you want to use into your project's `.cursor/rules` dire
 
 ## 📚 Available Rule Sets
 
+### 📦 [NuGet Package Publishing](nuget-packages/)
+Rules for publishing high-quality NuGet packages:
+- 📄 License configuration best practices
+- 📚 Package documentation requirements
+- 🏷️ Metadata organization guidelines
+- 🔍 Source debugging and symbol package setup
+- 🔗 Dependency management recommendations
+- 🔢 Versioning conventions
+- 🚀 Build and pack commands
+
 ### 🛠️ [.NET Tool Management](dotnet-tools/)
 Rules for working with .NET CLI tools:
 - 📦 Publishing tools as NuGet packages

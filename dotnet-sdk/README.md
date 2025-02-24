@@ -28,4 +28,10 @@ These rules help ensure:
 - Safe and consistent package management via CLI
 - License compliance and security scanning
 - Version management best practices
-- Automated vulnerability detection 
+- Automated vulnerability detection
+
+## Related Rules
+
+- For publishing your own NuGet packages, see the [NuGet Package Publishing Rules](../nuget-packages/README.md)
+- For CI/CD integration, see the [CI/CD Rules](../ci-cd/README.md)
+- For .NET tool management, see the [.NET Tool Rules](../dotnet-tools/README.md) 

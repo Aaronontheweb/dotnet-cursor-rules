@@ -29,4 +29,10 @@ This rule applies to signing configuration files (`signsettings.json`, `appsetti
 
 These rules are automatically enforced through Cursor when working with relevant files. The rules provide inline guidance and validation to ensure your build and deployment configurations follow our established best practices, regardless of whether you're using GitHub Actions or Azure DevOps as your CI/CD platform.
 
-For more information about our CI/CD practices or to propose changes to these rules, please contact the DevOps team. 
+For more information about our CI/CD practices or to propose changes to these rules, please contact the DevOps team.
+
+## Related Rules
+
+- For NuGet package publishing best practices, see the [NuGet Package Publishing Rules](../nuget-packages/README.md)
+- For .NET SDK management, see the [.NET SDK Management Rules](../dotnet-sdk/README.md)
+- For .NET tool management, see the [.NET Tool Rules](../dotnet-tools/README.md) 
