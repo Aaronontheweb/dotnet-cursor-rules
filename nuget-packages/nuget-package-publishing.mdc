@@ -1,0 +1,711 @@
+---
+description: This document provides comprehensive guidance for publishing high-quality NuGet packages that follow industry best practices.
+globs: *.props, *.csproj, *.fsproj
+---
+
+# NuGet Package Publishing Best Practices
+
+This document provides comprehensive guidance for publishing high-quality NuGet packages that follow industry best practices.
+
+## Table of Contents
+
+- [License Configuration](#license-configuration)
+- [Package Documentation](#package-documentation)
+- [Metadata Organization](#metadata-organization)
+- [Source Debugging Support](#source-debugging-support)
+- [Package Dependencies](#package-dependencies)
+- [Versioning](#versioning)
+- [Build and Pack Commands](#build-and-pack-commands)
+- [Quality Checks](#quality-checks)
+
+## License Configuration
+
+### Use License Expressions
+
+Always use SPDX license expressions instead of deprecated license URLs or embedding license files in your package.
+
+#### ✅ DO: Use license expression
+
+```xml
+<PropertyGroup>
+  <PackageLicenseExpression>MIT</PackageLicenseExpression>
+</PropertyGroup>
+```
+
+#### ❌ DON'T: Use deprecated licenseUrl
+
+```xml
+<PropertyGroup>
+  <PackageLicenseUrl>https://licenses.nuget.org/MIT</PackageLicenseUrl>
+</PropertyGroup>
+```
+
+### Common License Expression Examples
+
+#### MIT License
+
+```xml
+<PropertyGroup>
+  <PackageLicenseExpression>MIT</PackageLicenseExpression>
+</PropertyGroup>
+```
+
+#### Apache 2.0 License
+
+```xml
+<PropertyGroup>
+  <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+</PropertyGroup>
+```
+
+#### BSD 3-Clause License
+
+```xml
+<PropertyGroup>
+  <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
+</PropertyGroup>
+```
+
+#### GPL v3 License
+
+```xml
+<PropertyGroup>
+  <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
+</PropertyGroup>
+```
+
+#### Multiple Licenses (OR)
+
+```xml
+<PropertyGroup>
+  <PackageLicenseExpression>MIT OR Apache-2.0</PackageLicenseExpression>
+</PropertyGroup>
+```
+
+## Package Documentation
+
+### Include README.md
+
+Always include a README.md file in your package to provide clear documentation for users.
+
+#### ✅ DO: Include README with proper configuration
+
+```xml
+<PropertyGroup>
+  <PackageReadmeFile>README.md</PackageReadmeFile>
+</PropertyGroup>
+<ItemGroup>
+  <None Include="README.md" Pack="true" PackagePath="/" />
+</ItemGroup>
+```
+
+#### ✅ DO: Include README from a different location
+
+```xml
+<PropertyGroup>
+  <PackageReadmeFile>README.md</PackageReadmeFile>
+</PropertyGroup>
+<ItemGroup>
+  <None Include="docs/README.md" Pack="true" PackagePath="/" />
+</ItemGroup>
+```
+
+#### ❌ DON'T: Forget to include the README in the package
+
+```xml
+<PropertyGroup>
+  <PackageReadmeFile>README.md</PackageReadmeFile>
+  <!-- Missing the ItemGroup that includes the file -->
+</PropertyGroup>
+```
+
+### README Content Best Practices
+
+A good README.md should include:
+
+1. Package name and description
+2. Installation instructions
+3. Basic usage examples
+4. API documentation or link to it
+5. License information
+6. Contributing guidelines
+
+#### Example README.md Structure
+
+```markdown
+# MyAwesomePackage
+
+A lightweight, high-performance library for doing awesome things.
+
+## Installation
+
+```shell
+dotnet add package MyAwesomePackage
+```
+
+## Quick Start
+
+```csharp
+using MyAwesomeNamespace;
+
+var awesome = new AwesomeClass();
+var result = awesome.DoSomethingAwesome();
+```
+
+## Features
+
+- Feature 1: Description
+- Feature 2: Description
+- Feature 3: Description
+
+## Documentation
+
+For full documentation, visit [our docs site](https://docs.myawesomepackage.com).
+
+## License
+
+MIT License
+```
+
+### Image Domain Restrictions
+
+When including images in your README.md, ensure they come from trusted domains. NuGet.org only renders images from approved domains.
+
+#### Approved Image Domains
+
+- api.codacy.com
+- app.codacy.com
+- api.codeclimate.com
+- api.dependabot.com
+- api.travis-ci.com
+- api.reuse.software
+- app.fossa.com
+- app.fossa.io
+- avatars.githubusercontent.com
+- badge.fury.io
+- badgen.net
+- badges.gitter.im
+- buildstats.info
+- caniuse.bitsofco.de
+- camo.githubusercontent.com
+- cdn.jsdelivr.net
+- cdn.syncfusion.com
+- ci.appveyor.com
+- circleci.com
+- codecov.io
+- codefactor.io
+- coveralls.io
+- dev.azure.com
+- flat.badgen.net
+- github.com/.../workflows/.../badge.svg
+- gitlab.com
+- img.shields.io
+- i.imgur.com
+- isitmaintained.com
+- opencollective.com
+- raw.github.com
+- raw.githubusercontent.com
+- snyk.io
+- sonarcloud.io
+- travis-ci.com
+- travis-ci.org
+- wakatime.com
+- user-images.githubusercontent.com
+
+#### ✅ DO: Use approved domains for images
+
+```markdown
+![Build Status](https://img.shields.io/github/workflow/status/myorg/myrepo/CI)
+![Coverage](https://codecov.io/gh/myorg/myrepo/branch/main/graph/badge.svg)
+```
+
+#### ❌ DON'T: Use unapproved domains for images
+
+```markdown
+![Logo](https://my-unapproved-domain.com/logo.png)
+```
+
+## Metadata Organization
+
+### Directory.Build.props for Common Metadata
+
+Use `Directory.Build.props` for common metadata shared across multiple packages in a solution.
+
+#### ✅ DO: Place common metadata in Directory.Build.props
+
+```xml
+<Project>
+  <PropertyGroup>
+    <!-- Company/Organization Information -->
+    <Authors>Contoso, Inc.</Authors>
+    <Company>Contoso, Inc.</Company>
+    <Copyright>© $([System.DateTime]::Now.Year) Contoso, Inc. All rights reserved.</Copyright>
+    
+    <!-- Repository Information -->
+    <PackageProjectUrl>https://github.com/contoso/awesome-library</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/contoso/awesome-library.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    
+    <!-- Release Information -->
+    <PackageReleaseNotes>https://github.com/contoso/awesome-library/releases</PackageReleaseNotes>
+    
+    <!-- Common Package Configuration -->
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon>
+    
+    <!-- Build Configuration -->
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)\icon.png" Pack="true" PackagePath="\" Visible="false" />
+  </ItemGroup>
+</Project>
+```
+
+### Project-Specific Metadata
+
+Keep package-specific metadata in the project file (`.csproj`, `.fsproj`).
+
+#### ✅ DO: Place package-specific metadata in project file
+
+```xml
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
+    
+    <!-- Package-specific metadata -->
+    <PackageId>Contoso.AwesomeLibrary.Core</PackageId>
+    <Version>1.2.3</Version>
+    <Description>A core library for doing awesome things efficiently and reliably.</Description>
+    <PackageTags>awesome;library;performance;utilities</PackageTags>
+    
+    <!-- Package-specific configuration -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+</Project>
+```
+
+#### ❌ DON'T: Duplicate common metadata in project files
+
+```xml
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
+    
+    <!-- DON'T duplicate these in every project file -->
+    <Authors>Contoso, Inc.</Authors>
+    <Company>Contoso, Inc.</Company>
+    <Copyright>© 2023 Contoso, Inc. All rights reserved.</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/contoso/awesome-library</PackageProjectUrl>
+    
+    <!-- Package-specific metadata -->
+    <PackageId>Contoso.AwesomeLibrary.Core</PackageId>
+    <Version>1.2.3</Version>
+    <Description>A core library for doing awesome things efficiently and reliably.</Description>
+    <PackageTags>awesome;library;performance;utilities</PackageTags>
+  </PropertyGroup>
+</Project>
+```
+
+## Source Debugging Support
+
+### Enable SourceLink
+
+SourceLink enables step-through debugging of your package's source code directly from NuGet packages.
+
+#### ✅ DO: Configure SourceLink for GitHub
+
+```xml
+<PropertyGroup>
+  <PublishRepositoryUrl>true</PublishRepositoryUrl>
+  <EmbedUntrackedSources>true</EmbedUntrackedSources>
+  <IncludeSymbols>true</IncludeSymbols>
+  <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  <!-- Recommended for deterministic builds in CI -->
+  <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+</PropertyGroup>
+
+<ItemGroup>
+  <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
+</ItemGroup>
+```
+
+#### ✅ DO: Configure SourceLink for Azure DevOps
+
+```xml
+<PropertyGroup>
+  <PublishRepositoryUrl>true</PublishRepositoryUrl>
+  <EmbedUntrackedSources>true</EmbedUntrackedSources>
+  <IncludeSymbols>true</IncludeSymbols>
+  <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+</PropertyGroup>
+
+<ItemGroup>
+  <PackageReference Include="Microsoft.SourceLink.AzureRepos.Git" Version="1.1.1" PrivateAssets="All"/>
+</ItemGroup>
+```
+
+#### ✅ DO: Configure SourceLink for GitLab
+
+```xml
+<PropertyGroup>
+  <PublishRepositoryUrl>true</PublishRepositoryUrl>
+  <EmbedUntrackedSources>true</EmbedUntrackedSources>
+  <IncludeSymbols>true</IncludeSymbols>
+  <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+</PropertyGroup>
+
+<ItemGroup>
+  <PackageReference Include="Microsoft.SourceLink.GitLab" Version="1.1.1" PrivateAssets="All"/>
+</ItemGroup>
+```
+
+#### ❌ DON'T: Publish packages without symbol support
+
+```xml
+<PropertyGroup>
+  <!-- Missing SourceLink and symbol configuration -->
+  <Version>1.0.0</Version>
+</PropertyGroup>
+```
+
+### Symbol Packages
+
+Always include symbol packages (`.snupkg`) when publishing to NuGet.org.
+
+#### ✅ DO: Configure symbol package generation
+
+```xml
+<PropertyGroup>
+  <IncludeSymbols>true</IncludeSymbols>
+  <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+</PropertyGroup>
+```
+
+#### ✅ DO: Publish both package and symbols
+
+```shell
+dotnet pack -c Release
+dotnet nuget push bin/Release/MyPackage.1.0.0.nupkg -s https://api.nuget.org/v3/index.json -k YOUR_API_KEY
+dotnet nuget push bin/Release/MyPackage.1.0.0.snupkg -s https://api.nuget.org/v3/index.json -k YOUR_API_KEY
+```
+
+## Package Dependencies
+
+### Minimize Dependencies
+
+Keep dependencies to a minimum to reduce potential conflicts and improve load times.
+
+#### ✅ DO: Keep dependencies minimal
+
+```xml
+<ItemGroup>
+  <!-- Only include what you absolutely need -->
+  <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+</ItemGroup>
+```
+
+#### ❌ DON'T: Include unnecessary dependencies
+
+```xml
+<ItemGroup>
+  <!-- Don't include packages you don't directly use -->
+  <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+  <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
+</ItemGroup>
+```
+
+### Use Appropriate Version Ranges
+
+Specify version ranges that balance flexibility with stability.
+
+#### ✅ DO: Use specific version ranges
+
+```xml
+<ItemGroup>
+  <!-- Exact version -->
+  <PackageReference Include="ExactPackage" Version="1.2.3" />
+  
+  <!-- Minimum version (1.0.0 or higher) -->
+  <PackageReference Include="MinimumPackage" Version="1.0.0" />
+  
+  <!-- Range with minimum and maximum (>= 2.0.0 and < 3.0.0) -->
+  <PackageReference Include="RangePackage" Version="[2.0.0,3.0.0)" />
+  
+  <!-- Specific major and minor, any patch (>= 1.2.0 and < 1.3.0) -->
+  <PackageReference Include="MinorRangePackage" Version="[1.2.*,)" />
+</ItemGroup>
+```
+
+#### ❌ DON'T: Use overly broad version ranges
+
+```xml
+<ItemGroup>
+  <!-- Too broad, accepts any version -->
+  <PackageReference Include="AnyVersionPackage" Version="*" />
+  
+  <!-- Too broad, accepts any version from 1.0.0 onwards -->
+  <PackageReference Include="TooFlexiblePackage" Version="1.*" />
+</ItemGroup>
+```
+
+### Split Functionality into Separate Packages
+
+For complex libraries, consider splitting functionality into separate packages.
+
+#### ✅ DO: Split functionality logically
+
+Example package structure:
+- `MyCompany.MyLibrary.Core` - Core functionality
+- `MyCompany.MyLibrary.Data` - Data access components
+- `MyCompany.MyLibrary.AspNetCore` - ASP.NET Core integration
+- `MyCompany.MyLibrary.All` - Metapackage that references all the above
+
+#### ✅ DO: Create metapackages for convenience
+
+```xml
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>MyCompany.MyLibrary.All</PackageId>
+    <Description>Metapackage that includes all MyLibrary components</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MyCompany.MyLibrary.Core" Version="1.0.0" />
+    <PackageReference Include="MyCompany.MyLibrary.Data" Version="1.0.0" />
+    <PackageReference Include="MyCompany.MyLibrary.AspNetCore" Version="1.0.0" />
+  </ItemGroup>
+</Project>
+```
+
+## Versioning
+
+### Follow Semantic Versioning (SemVer)
+
+Use SemVer to communicate the impact of changes to your package.
+
+#### Version Components
+
+- **Major (X.y.z)**: Breaking changes
+- **Minor (x.Y.z)**: New features, non-breaking
+- **Patch (x.y.Z)**: Bug fixes only
+
+#### ✅ DO: Increment version numbers appropriately
+
+```xml
+<PropertyGroup>
+  <!-- Initial version -->
+  <Version>1.0.0</Version>
+  
+  <!-- After adding new features -->
+  <Version>1.1.0</Version>
+  
+  <!-- After fixing bugs -->
+  <Version>1.1.1</Version>
+  
+  <!-- After making breaking changes -->
+  <Version>2.0.0</Version>
+</PropertyGroup>
+```
+
+#### ✅ DO: Use version suffixes for pre-release versions
+
+```xml
+<PropertyGroup>
+  <!-- Alpha release -->
+  <Version>1.0.0-alpha.1</Version>
+  
+  <!-- Beta release -->
+  <Version>1.0.0-beta.2</Version>
+  
+  <!-- Release candidate -->
+  <Version>1.0.0-rc.1</Version>
+  
+  <!-- Final release -->
+  <Version>1.0.0</Version>
+</PropertyGroup>
+```
+
+#### ❌ DON'T: Make breaking changes without incrementing the major version
+
+```xml
+<!-- DON'T: This suggests no breaking changes -->
+<PropertyGroup>
+  <Version>1.2.0</Version>
+</PropertyGroup>
+```
+
+### Version in Directory.Build.props
+
+For multi-package solutions, manage versions centrally.
+
+#### ✅ DO: Centralize version management
+
+```xml
+<!-- In Directory.Build.props -->
+<Project>
+  <PropertyGroup>
+    <VersionPrefix>1.2.3</VersionPrefix>
+    <VersionSuffix Condition="'$(Configuration)' == 'Debug'">preview</VersionSuffix>
+  </PropertyGroup>
+</Project>
+```
+
+## Build and Pack Commands
+
+### Generate Packages with dotnet pack
+
+Use `dotnet pack` to generate both `.nupkg` and `.snupkg` files.
+
+#### ✅ DO: Pack with appropriate configuration
+
+```shell
+# Basic pack command
+dotnet pack -c Release
+
+# Pack with specific version
+dotnet pack -c Release /p:Version=1.2.3
+
+# Pack with version suffix
+dotnet pack -c Release --version-suffix preview.1
+
+# Pack multiple projects
+dotnet pack MySolution.sln -c Release
+```
+
+### Verify Package Contents
+
+Always verify package contents before publishing.
+
+#### ✅ DO: Inspect package contents
+
+```shell
+# Install the NuGet Package Explorer CLI
+dotnet tool install -g NuGet.PackageExplorer.CLI
+
+# View package contents
+nuget-pe view MyPackage.1.0.0.nupkg
+
+# Or use the nuget CLI
+nuget verify MyPackage.1.0.0.nupkg
+```
+
+### Publish Packages
+
+Publish packages to NuGet.org or a private feed.
+
+#### ✅ DO: Publish to NuGet.org
+
+```shell
+# Push package to NuGet.org
+dotnet nuget push MyPackage.1.0.0.nupkg -s https://api.nuget.org/v3/index.json -k YOUR_API_KEY
+
+# Push symbol package
+dotnet nuget push MyPackage.1.0.0.snupkg -s https://api.nuget.org/v3/index.json -k YOUR_API_KEY
+```
+
+#### ✅ DO: Publish to a private feed
+
+```shell
+# Push to Azure Artifacts
+dotnet nuget push MyPackage.1.0.0.nupkg -s https://pkgs.dev.azure.com/myorg/_packaging/myfeed/nuget/v3/index.json -k az
+
+# Push to GitHub Packages
+dotnet nuget push MyPackage.1.0.0.nupkg -s https://nuget.pkg.github.com/myorg/index.json -k YOUR_GITHUB_TOKEN
+```
+
+## Quality Checks
+
+### Pre-publish Checklist
+
+Always run through this checklist before publishing:
+
+1. **Metadata Verification**
+   - Package ID is correct and follows naming conventions
+   - Version is appropriate (SemVer)
+   - Description is clear and informative
+   - Authors and copyright information is correct
+   - License expression is valid
+   - Project URL and repository URL are correct
+   - Tags are relevant and helpful for discoverability
+
+2. **Content Verification**
+   - README.md is included and renders correctly
+   - All images in README use approved domains
+   - XML documentation is generated and included
+   - No unnecessary files are included in the package
+
+3. **Symbol and Source Verification**
+   - Symbol package (`.snupkg`) is generated
+   - SourceLink is configured correctly
+   - Source debugging works as expected
+
+4. **Dependency Verification**
+   - Dependencies are minimal and necessary
+   - Version ranges are appropriate
+   - No conflicting dependencies
+
+5. **Functional Verification**
+   - Package installs successfully in a new project
+   - Basic functionality works as expected
+   - No runtime errors or exceptions
+
+### Automated Quality Checks
+
+Implement automated checks in your CI/CD pipeline.
+
+#### ✅ DO: Add package validation to CI
+
+```yaml
+# Example GitHub Actions workflow
+name: Package Validation
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore -c Release
+    - name: Test
+      run: dotnet test --no-build -c Release
+    - name: Pack
+      run: dotnet pack --no-build -c Release
+    - name: Validate Package
+      run: |
+        dotnet tool install -g NuGet.PackageExplorer.CLI
+        nuget-pe validate bin/Release/*.nupkg
+```
+
+## Additional Resources
+
+- [NuGet Documentation](https://docs.microsoft.com/en-us/nuget/)
+- [SPDX License List](https://spdx.org/licenses/)
+- [SourceLink Documentation](https://github.com/dotnet/sourcelink)
+- [SemVer Specification](https://semver.org/)
+- [NuGet Package Explorer](https://github.com/NuGetPackageExplorer/NuGetPackageExplorer) 
