@@ -1,7 +1,9 @@
 ---
 description: This file provides guidelines for maintaining .NET solutions with consistent SDK versions, shared metadata, and centralized package management.
 globs: *.sln, global.json, Directory.Build.props, Directory.Package.props, *.csproj, *.fsproj
+alwaysApply: false
 ---
+
 # Cursor Rules File: Best Practices for .NET Solution Management
 
 Role Definition:

@@ -1,14 +1,7 @@
 ---
 description: Rules and best practices for .NET build systems
-applies_to: 
-  - "**/*.sln"
-  - "**/*.csproj"
-  - "**/*.fsproj"
-  - "**/Directory.Build.props"
-  - "**/build.ps1"
-  - "**/.github/workflows/*.yaml"
-  - "**/.azure/*.yaml"
-  - "**/RELEASE_NOTES.md"
+globs: **/Directory.Build.props,**/.azure/*.yaml,**/build-system/*.yaml,**/RELEASE_NOTES.md,**/.github/workflows/*.yaml,**/*.sln,**/*.csproj
+alwaysApply: false
 ---
 
 # .NET Build System Rules and Best Practices

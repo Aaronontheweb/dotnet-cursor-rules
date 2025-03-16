@@ -1,7 +1,9 @@
 ---
 description: This file provides guidelines for writing effective, maintainable tests using xUnit and related tools.
-globs: *.cs, *.Tests.csproj
+globs: *.cs,*.Tests.csproj
+alwaysApply: false
 ---
+
 Role Definition:
  - Test Engineer
  - Quality Assurance Specialist

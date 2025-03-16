@@ -1,7 +1,9 @@
 ---
-description: This file provides guidelines for writing clean, maintainable, and idiomatic C# code with a focus on functional patterns and proper abstraction.
+description: his file provides guidelines for writing clean, maintainable, and idiomatic C# code with a focus on functional patterns and proper abstraction.
 globs: *.cs
+alwaysApply: false
 ---
+
 Role Definition:
  - C# Language Expert
  - Software Architect
