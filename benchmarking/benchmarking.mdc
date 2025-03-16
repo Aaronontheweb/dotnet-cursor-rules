@@ -1,3 +1,8 @@
+---
+description: Designing benchmarks for measuring .NET performance
+globs: 
+alwaysApply: false
+---
 # Cursor Rules File: .NET Benchmarking Best Practices
 # This file provides guidelines for writing effective benchmarks using BenchmarkDotNet
 # and other performance testing tools.

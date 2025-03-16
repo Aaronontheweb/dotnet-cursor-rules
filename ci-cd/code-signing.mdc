@@ -1,14 +1,7 @@
 ---
 description: Rules and best practices for .NET code signing
-applies_to:
-  - "**/signsettings.json"
-  - "**/appsettings.json"
-  - "**/*.nupkg"
-triggers:
-  - file_pattern: "**/signsettings.json"
-    exists: true
-  - file_pattern: "**/appsettings.json"
-    content_pattern: "SignClient"
+globs: **/signsettings.json,**/appsettings.json,**/*.nupkg
+alwaysApply: false
 ---
 
 # .NET Code Signing Rules and Best Practices

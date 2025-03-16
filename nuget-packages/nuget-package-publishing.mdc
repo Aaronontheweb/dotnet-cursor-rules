@@ -1,6 +1,7 @@
 ---
 description: This document provides comprehensive guidance for publishing high-quality NuGet packages that follow industry best practices.
 globs: *.props, *.csproj, *.fsproj
+alwaysApply: false
 ---
 
 # NuGet Package Publishing Best Practices
@@ -9,14 +10,14 @@ This document provides comprehensive guidance for publishing high-quality NuGet 
 
 ## Table of Contents
 
-- [License Configuration](#license-configuration)
-- [Package Documentation](#package-documentation)
-- [Metadata Organization](#metadata-organization)
-- [Source Debugging Support](#source-debugging-support)
-- [Package Dependencies](#package-dependencies)
-- [Versioning](#versioning)
-- [Build and Pack Commands](#build-and-pack-commands)
-- [Quality Checks](#quality-checks)
+- [License Configuration](mdc:#license-configuration)
+- [Package Documentation](mdc:#package-documentation)
+- [Metadata Organization](mdc:#metadata-organization)
+- [Source Debugging Support](mdc:#source-debugging-support)
+- [Package Dependencies](mdc:#package-dependencies)
+- [Versioning](mdc:#versioning)
+- [Build and Pack Commands](mdc:#build-and-pack-commands)
+- [Quality Checks](mdc:#quality-checks)
 
 ## License Configuration
 
@@ -160,7 +161,7 @@ var result = awesome.DoSomethingAwesome();
 
 ## Documentation
 
-For full documentation, visit [our docs site](https://docs.myawesomepackage.com).
+For full documentation, visit [our docs site](mdc:https:/docs.myawesomepackage.com).
 
 ## License
 
@@ -215,14 +216,14 @@ When including images in your README.md, ensure they come from trusted domains. 
 #### ✅ DO: Use approved domains for images
 
 ```markdown
-![Build Status](https://img.shields.io/github/workflow/status/myorg/myrepo/CI)
-![Coverage](https://codecov.io/gh/myorg/myrepo/branch/main/graph/badge.svg)
+![Build Status](mdc:https:/img.shields.io/github/workflow/status/myorg/myrepo/CI)
+![Coverage](mdc:https:/codecov.io/gh/myorg/myrepo/branch/main/graph/badge.svg)
 ```
 
 #### ❌ DON'T: Use unapproved domains for images
 
 ```markdown
-![Logo](https://my-unapproved-domain.com/logo.png)
+![Logo](mdc:https:/my-unapproved-domain.com/logo.png)
 ```
 
 ## Metadata Organization
@@ -704,8 +705,8 @@ jobs:
 
 ## Additional Resources
 
-- [NuGet Documentation](https://docs.microsoft.com/en-us/nuget/)
-- [SPDX License List](https://spdx.org/licenses/)
-- [SourceLink Documentation](https://github.com/dotnet/sourcelink)
-- [SemVer Specification](https://semver.org/)
-- [NuGet Package Explorer](https://github.com/NuGetPackageExplorer/NuGetPackageExplorer) 
+- [NuGet Documentation](mdc:https:/docs.microsoft.com/en-us/nuget)
+- [SPDX License List](mdc:https:/spdx.org/licenses)
+- [SourceLink Documentation](mdc:https:/github.com/dotnet/sourcelink)
+- [SemVer Specification](mdc:https:/semver.org)
+- [NuGet Package Explorer](mdc:https:/github.com/NuGetPackageExplorer/NuGetPackageExplorer) 

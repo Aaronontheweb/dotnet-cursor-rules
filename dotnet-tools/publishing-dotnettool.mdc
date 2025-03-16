@@ -1,7 +1,9 @@
 ---
 description: This file serves as a guideline for the Cursor AI Agent to ensure the proper creation, packaging, and publishing of a `dotnet tool`. Follow these rules to maintain consistency, quality, and security across published tools.
 globs: 
+alwaysApply: false
 ---
+
 # Cursor Rules File: Best Practices for Publishing a dotnet Tool
 # This file serves as a guideline for the Cursor AI Agent to ensure the proper
 # creation, packaging, and publishing of a dotnet tool. Follow these rules to
