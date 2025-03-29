@@ -237,4 +237,46 @@ Best Practices:
       */
       ```
 
+### IterationSetup and IterationCleanup Method Signatures
+
+**Library Name**: BenchmarkDotNet
+**Programming Language**: C#
+**Library Version**: (,14.0]
+**Severity**: Error (must be followed)
+
+#### Rule Description
+Always make sure to use `void` methods when defining `IterationSetup` or `IterationCleanup` activities for BenchmarkDotNet classes.
+
+#### Good Examples
+```csharp
+// Good
+[IterationSetup]
+public void DoSetup()
+{
+}
+
+[IterationCleanup]
+public void DoCleanup()
+{
+}
+```
+
+#### Bad Examples
+```csharp
+// Bad - will throw runtime exception
+[IterationSetup]
+public async Task DoSetup()
+{
+}
+
+[IterationCleanup]
+public async Task DoCleanup()
+{
+}
+```
+
+#### Rationale
+While async Task methods will compile, BenchmarkDotNet will throw a runtime exception when these methods are used. The framework requires these methods to be void methods to function properly. 
+
+
 # End of Cursor Rules File 
